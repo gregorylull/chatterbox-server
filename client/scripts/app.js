@@ -10,10 +10,10 @@ $(document).ready(function () {
 
   var postMSG = function (message) {
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: 'http://127.0.0.1:3000',
       type: "POST",
       data: JSON.stringify(message),
-      contentType: 'application/json',
+      // contentType: 'application/json',
       success: function (data) {
         console.log("message SENT!", data);
       },
@@ -51,7 +51,7 @@ $(document).ready(function () {
 
   var getMessages = function(){
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: 'http://127.0.0.1:3000',
       type: 'GET',
       data: {
         order: '-createdAt',
@@ -74,7 +74,7 @@ $(document).ready(function () {
   // get active rooms
   var getActiveRooms = function () {
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: 'http://127.0.0.1:3000',
       type: 'GET',
       data: {
         order: '-createdAt',
@@ -153,11 +153,11 @@ $(document).ready(function () {
     $('.' + name).addClass('friend').parent().addClass('friend');
   });
 
- getActiveRooms();
- getMessages();
+ // getActiveRooms();
+ // getMessages();
 
- setInterval(function () {
-   getMessages();
-   getActiveRooms();
- }, 3000);
+//  setInterval(function () {
+//    getMessages();
+//    getActiveRooms();
+//  }, 3000);
 });

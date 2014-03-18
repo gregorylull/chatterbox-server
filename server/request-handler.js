@@ -13,11 +13,12 @@ exports.handleRequest = function(request, response) {
    * http://nodemanual.org/0.8.14/nodejs_ref_guide/http.html */
 
   console.log("Serving request type " + request.method + " for url " + request.url);
+  // console.log(JSON.parse(request._data));
 
   var statusCode = 200;
-
+  var data;
   /* Without this line, this server wouldn't work. See the note
-   * below about CORS. */
+   * below  about CORS. */
   var headers = defaultCorsHeaders;
 
   headers['Content-Type'] = "text/plain";
@@ -25,14 +26,32 @@ exports.handleRequest = function(request, response) {
   /* .writeHead() tells our server what HTTP status code to send back */
   response.writeHead(statusCode, headers);
 
+  console.log( "before request-on-data");
   // read client index.html, write in response to client
-  
+  var body = "";
+  request.setEncoding('utf8');
+  request.on('data', function(chunk){
+    console.log('chunking');
+    console.log(chunk);
+    body += chunk;
+  });
+
+  request.on('end', function(){
+    console.log("inside end");
+    data = JSON.parse(body);
+    console.log("JSON type", typeof JSON.parse(body));
+    console.log("typeof data: ", typeof data, data);
+  });
+
+  response.write("return data");
+  response.write("\n second line \n");
+
 
   /* Make sure to always call response.end() - Node will not send
    * anything back to the client until you do. The string you pass to
    * response.end() will be the body of the response - i.e. what shows
    * up in the browser.*/
-  response.end("Hello, World!");
+  response.end();
 };
 
 /* These headers will allow Cross-Origin Resource Sharing (CORS).
