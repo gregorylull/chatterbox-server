@@ -4,7 +4,7 @@
  * You'll have to figure out a way to export this function from
  * this file and include it in basic-server.js so that it actually works.
  * *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html. */
-var storage = [];
+var results = [];
 exports.handleRequest = function(request, response) {
   /* the 'request' argument comes from nodes http module. It includes info about the
   request - such as what URL the browser is requesting. */
@@ -39,8 +39,8 @@ exports.handleRequest = function(request, response) {
     request.on('end', function(){
       console.log("inside end");
       data = JSON.parse(body);
-      storage.push(data);
-      console.log(storage);
+      results.push(data);
+      console.log(results);
       console.log("JSON type", typeof JSON.parse(body));
       console.log("typeof data: ", typeof data, data);
       response.end();
@@ -50,8 +50,8 @@ exports.handleRequest = function(request, response) {
     console.log("inside GET");
     request.on('end', function(){
       console.log('before response write');
-      response.write(JSON.stringify(storage));
-      console.log(JSON.stringify(storage));
+      response.write(JSON.stringify({results: results}));
+      console.log(JSON.stringify(results));
       response.end();
     });
   }

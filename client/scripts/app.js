@@ -53,14 +53,15 @@ $(document).ready(function () {
     $.ajax({
       url: 'http://127.0.0.1:3000',
       type: 'GET',
-      data: {
-        order: '-createdAt',
-        where: JSON.stringify({
-          roomname: myRoom,
-          createdAt: { $gt: {"__type": "Date", iso: lastMessageTime}}
-        })
-      },
+      // data: {
+      //   order: '-createdAt',
+      //   where: JSON.stringify({
+      //     roomname: myRoom,
+      //     createdAt: { $gt: {"__type": "Date", iso: lastMessageTime}}
+      //   })
+      // },
       success: function (data) {
+        data = JSON.parse(data);
         if(data.results.length > 0){
           formatMessages(data["results"]);
         }
@@ -154,11 +155,11 @@ $(document).ready(function () {
   });
 
  // getActiveRooms();
- // getMessages();
+  getMessages();
 
- // setInterval(function () {
- //   getMessages();
- //   getActiveRooms();
- // }, 3000);
+ setInterval(function () {
+   getMessages();
+   // getActiveRooms();
+ }, 3000);
 
 });
