@@ -26,32 +26,42 @@ exports.handleRequest = function(request, response) {
   /* .writeHead() tells our server what HTTP status code to send back */
   response.writeHead(statusCode, headers);
 
-  console.log( "before request-on-data");
   // read client index.html, write in response to client
   var body = "";
   request.setEncoding('utf8');
   request.on('data', function(chunk){
-    console.log('chunking');
-    console.log(chunk);
     body += chunk;
   });
   if(request.method === "POST"){
     request.on('end', function(){
-      console.log("inside end");
       data = JSON.parse(body);
+      var createdAt = (new Date()).toJSON();
+      data.createdAt = createdAt;
       results.push(data);
-      console.log(results);
-      console.log("JSON type", typeof JSON.parse(body));
-      console.log("typeof data: ", typeof data, data);
       response.end();
     });
   }
   if(request.method === 'GET'){
-    console.log("inside GET");
     request.on('end', function(){
-      console.log('before response write');
-      response.write(JSON.stringify({results: results}));
-      console.log(JSON.stringify(results));
+      // data = JSON.parse(body);
+      
+
+      var getDataQuery = require('url').parse(request.url, true).query;
+
+      if (getDataQuery.order) {
+        var sorted = results.slice();
+        var orderRequest = JSON.parse(getDataQuery.order);
+        if (orderRequest[0] === '-') {
+          var property = orderRequest.slice(1);
+          sorted.sort(function(a, b){
+            return (new Date(b[property])) - (new Date(a[property]));
+          });
+          response.write(JSON.stringify({results: sorted}));
+        }
+      }
+
+      // response.write(JSON.stringify({results: results}));
+      // console.log(JSON.stringify(results));
       response.end();
     });
   }
