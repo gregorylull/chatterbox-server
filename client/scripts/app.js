@@ -156,8 +156,9 @@ $(document).ready(function () {
  // getActiveRooms();
  // getMessages();
 
-//  setInterval(function () {
-//    getMessages();
-//    getActiveRooms();
-//  }, 3000);
+ // setInterval(function () {
+ //   getMessages();
+ //   getActiveRooms();
+ // }, 3000);
+
 });

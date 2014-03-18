@@ -4,7 +4,7 @@
  * You'll have to figure out a way to export this function from
  * this file and include it in basic-server.js so that it actually works.
  * *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html. */
-
+var storage = [];
 exports.handleRequest = function(request, response) {
   /* the 'request' argument comes from nodes http module. It includes info about the
   request - such as what URL the browser is requesting. */
@@ -35,23 +35,32 @@ exports.handleRequest = function(request, response) {
     console.log(chunk);
     body += chunk;
   });
-
-  request.on('end', function(){
-    console.log("inside end");
-    data = JSON.parse(body);
-    console.log("JSON type", typeof JSON.parse(body));
-    console.log("typeof data: ", typeof data, data);
-  });
-
-  response.write("return data");
-  response.write("\n second line \n");
-
+  if(request.method === "POST"){
+    request.on('end', function(){
+      console.log("inside end");
+      data = JSON.parse(body);
+      storage.push(data);
+      console.log(storage);
+      console.log("JSON type", typeof JSON.parse(body));
+      console.log("typeof data: ", typeof data, data);
+      response.end();
+    });
+  }
+  if(request.method === 'GET'){
+    console.log("inside GET");
+    request.on('end', function(){
+      console.log('before response write');
+      response.write(JSON.stringify(storage));
+      console.log(JSON.stringify(storage));
+      response.end();
+    });
+  }
+  // response.write("before End");
 
   /* Make sure to always call response.end() - Node will not send
    * anything back to the client until you do. The string you pass to
    * response.end() will be the body of the response - i.e. what shows
    * up in the browser.*/
-  response.end();
 };
 
 /* These headers will allow Cross-Origin Resource Sharing (CORS).
