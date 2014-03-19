@@ -94,7 +94,7 @@ exports.handleRequest = function(request, response) {
       // serving page
       if (firstTimeVisiting) {
         var fs = require('fs');
-        fs.readFile('/Users/hackreactor/code/greg/2014-02-chatterbox-server/client/index.html', 'utf8' ,function (err, html) {
+        fs.readFile( (process.cwd() + '/client/index.html'), 'utf8' ,function (err, html) {
           if (err) {
              throw err; 
           }
@@ -107,8 +107,12 @@ exports.handleRequest = function(request, response) {
           response.end(html);
         });
         return;
+      // }else if(getDataQuery.username){
+      //   response.writeHeader(200, headers); 
+      //   response.end();
+      //   return;
 
-      } else if ( !getDataQuery.order && getURL.pathname !== '/favicon.ico'){ 
+      } else if ( !getDataQuery.username && !getDataQuery.order && getURL.pathname !== '/favicon.ico'){ 
         console.log('before pageLoad, getURL: ', getURL.pathname);
         pageLoad(response, getURL.pathname);
 
@@ -119,6 +123,7 @@ exports.handleRequest = function(request, response) {
         querySortOrder(getDataQuery, response);
       }
 
+      response.writeHeader(200, headers); 
 
 
       // response.write(JSON.stringify({results: results}));
