@@ -7,10 +7,12 @@ $(document).ready(function () {
   var rooms = {};
   var friends = {};
   var banned = {};
+  var serverURL = 'http://127.0.0.1';
+  var serverPORT = ':3000';
 
   var postMSG = function (message) {
     $.ajax({
-      url: 'http://127.0.0.1:3000',
+      url: serverURL + serverPORT,
       type: "POST",
       data: JSON.stringify(message),
       // contentType: 'application/json',
@@ -51,7 +53,7 @@ $(document).ready(function () {
 
   var getMessages = function(){
     $.ajax({
-      url: 'http://127.0.0.1:3000',
+      url: serverURL + serverPORT,
       type: 'GET',
       // data: 'aGet',
       data: {
@@ -76,7 +78,7 @@ $(document).ready(function () {
   // get active rooms
   var getActiveRooms = function () {
     $.ajax({
-      url: 'http://127.0.0.1:3000',
+      url: serverURL + serverPORT,
       type: 'GET',
       data: {
         order: '-createdAt',
@@ -135,6 +137,7 @@ $(document).ready(function () {
     msgObj.roomname = myRoom;
 
     postMSG(msgObj);
+    $('.draft').val("");
   });
 
   // retrieving username from input box
